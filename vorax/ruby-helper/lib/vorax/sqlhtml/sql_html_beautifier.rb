@@ -4,6 +4,7 @@ require 'vorax/sqlhtml/p_tag_handler.rb'
 require 'vorax/sqlhtml/text_tag_handler.rb'
 require 'vorax/sqlhtml/br_tag_handler.rb'
 require 'vorax/sqlhtml/b_tag_handler.rb'
+require 'vorax/sqlhtml/pre_tag_handler.rb'
 
 module Vorax
 
@@ -23,6 +24,7 @@ module Vorax
 
     def beautify(html)
       tailored_html = html.gsub(/\s*<br>\s*\n\s*<p>/, '<p>')
+      p tailored_html
       body = Nokogiri::HTML(tailored_html.gsub(/&amp;/, '&amp;amp;'), nil, 'utf-8').xpath('/html/body')
       return walk(body)
     end
