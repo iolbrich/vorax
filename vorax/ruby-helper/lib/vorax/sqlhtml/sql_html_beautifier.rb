@@ -24,7 +24,6 @@ module Vorax
 
     def beautify(html)
       tailored_html = html.gsub(/\s*<br>\s*\n\s*<p>/, '<p>')
-      p tailored_html
       body = Nokogiri::HTML(tailored_html.gsub(/&amp;/, '&amp;amp;'), nil, 'utf-8').xpath('/html/body')
       return walk(body)
     end
@@ -39,7 +38,7 @@ module Vorax
           buf << h.visit(child, @registered_tag_handlers).to_s
         end
       end
-      return buf
+      return "#{buf}\n"
     end
 
   end
