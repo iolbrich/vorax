@@ -29,12 +29,12 @@ module Vorax
           @read_buffer_size = [32767, END_OF_REQUEST.bytesize].max
           @process = process
           # env path separator
-          separator = ':'
+          @separator = ':'
           if RUBY_PLATFORM.downcase.include?("mswin") ||
               RUBY_PLATFORM.downcase.include?("mingw") ||
               RUBY_PLATFORM.downcase.include?("cygwin")
             # on windows is ';'
-            separator = ';' 
+            @separator = ';' 
           end
           if File.exists?('login.sql')
             @local_login_warning = true
@@ -42,9 +42,10 @@ module Vorax
             # put the tmp_dir first on SQLPATH so that, the vorax generated login.sql to be found first in case the
             # session_owner_monitor is set to :on_login. This has to be set here in order the sqlplus process to inherit
             # this setting.
-            ENV['SQLPATH'] = "#{@process.convert_path(tmp_dir)}#{separator}#{ENV['SQLPATH']}"
+            ENV['SQLPATH'] = "#{@process.convert_path(tmp_dir)}#{@separator}#{ENV['SQLPATH']}"
             @local_login_warning = false
           end
+	  @sqlpath = ENV['SQLPATH']
           bootstrap_commands << "#prompt ___VORAX_END_OF_REQUEST___" << "."
           @process.create("sqlplus #{sqlplus_params} /nolog \"#{pack(bootstrap_commands, '_vorax_bootstrap.sql', false)}\"" + 
                           (debug ? " | tee sqlplus.log" : ""))
@@ -153,9 +154,9 @@ module Vorax
         @conn_changed_file = "_vorax_connection_changed.#{pid}"
         login_file_content = ''
         # is the SQLPATH variable initialized?
-        if sqlpath = ENV['SQLPATH']
+        if @sqlpath
           # skip the first path because it's our temp location
-          paths = sqlpath.split(/[;:]+/)[(1..-1)]
+          paths = @sqlpath.split(/[#{@separator}]+/)[(1..-1)]
           if paths
             paths.each do |path|
               # for every path in SQLPATH search for login.sql file
