@@ -104,7 +104,7 @@ module Vorax
         yield if block_given?
       end
       # remove the last line (it comes from the end delimitator)
-      output.sub!(/[^\n]*\Z/, '') unless output[(-1..-1)] == "\n"
+      #output.sub!(/[^\n]*\Z/, '') unless output[(-1..-1)] == "\n"
       output
     end
 
@@ -201,6 +201,7 @@ module Vorax
           chunk.gsub!(/\r/, '')
           @tail.push(buf) if buf
           tail_str = @tail.join
+          #p tail_str
           # check the tail for the END_OF_REQUEST marker
           if tail_str =~ /#{END_OF_REQUEST}/
             # GREAT: the end of the request has been detected!
@@ -208,7 +209,8 @@ module Vorax
             #@residual = tail_str[Regexp.last_match.end(0)..-1]
             @residual = ''
             # remove the line containing the END_OF_REQUEST from chunk
-            chunk.slice!(/#{END_OF_REQUEST}[^\Z]*/)
+            #chunk.slice!(/#{END_OF_REQUEST}[^\Z]*/)
+            chunk.slice!(/(?:\A|[\n]).*#{END_OF_REQUEST}.*[^\Z]*/)
             # get rid of the tail content... we don't need it anymore
             @tail.clear
             # the sqlplus is no longer busy
@@ -337,6 +339,7 @@ module Vorax
                   *config_for('define')]
       output = exec(commands.join("\n"))
       @session_owner_monitor = monitor # restore monitoring
+      p output
       if output =~ /<conn>(.*?)<\/conn>/
         connect_profile = $1
       else

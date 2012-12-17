@@ -38,7 +38,7 @@ module Vorax
           buf << h.visit(child, @registered_tag_handlers).to_s
         end
       end
-      return "#{buf}\n"
+      return buf
     end
 
   end
