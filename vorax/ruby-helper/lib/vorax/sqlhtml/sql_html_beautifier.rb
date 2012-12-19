@@ -39,7 +39,7 @@ module Vorax
         end
       end
       if String.method_defined?(:encode)
-        # get rid of "invalid byte sequence UTF-8"
+        # get rid of "invalid byte sequence UTF-8". ruby 1.9.3 only!
         buf.encode!('UTF-16', 'UTF-8', :invalid => :replace, :replace => '')
         buf.encode!('UTF-8', 'UTF-16')
       end
