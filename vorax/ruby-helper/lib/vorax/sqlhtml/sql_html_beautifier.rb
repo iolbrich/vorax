@@ -38,6 +38,11 @@ module Vorax
           buf << h.visit(child, @registered_tag_handlers).to_s
         end
       end
+      if String.method_defined?(:encode)
+        # get rid of "invalid byte sequence UTF-8"
+        buf.encode!('UTF-16', 'UTF-8', :invalid => :replace, :replace => '')
+        buf.encode!('UTF-8', 'UTF-16')
+      end
       return buf
     end
 
