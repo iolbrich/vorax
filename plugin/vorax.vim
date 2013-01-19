@@ -37,17 +37,15 @@ if !has('ruby')
   echo "***warning*** VoraX needs ruby support"
   finish
 else
-  " is it ruby 1.8?
   let rver = ''
   ruby VIM.command("let rver='" + RUBY_VERSION + "'")
   let rver_parts = split(rver, '\.')
   if type(rver_parts) ==  3 && len(rver_parts) >= 3
-    if (rver_parts[0] == '1' && rver_parts[1] == '8' && rver_parts[2] == '7') ||
-          \ (rver_parts[0] == '1' && rver_parts[1] == '9')
+    if rver_parts[0] == '1' && rver_parts[1] == '9'
       " good to go
     else
-      echo "***warning*** VoraX needs ruby 1.8.7 " .
-            \ "or ruby 1.9 support. Found " . rver
+      echo "***warning*** VoraX needs ruby 1.9 support. " .
+            \ "Found " . rver
       finish
     endif
   else
