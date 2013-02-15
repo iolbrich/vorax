@@ -629,16 +629,16 @@ function! voraxlib#utils#GetQuickFixCompilationErrors(owner, object, type)"{{{
     endif
     let filter_clause = "('" . a:type . "', '" . a:type . " BODY')"
   elseif a:type == 'PACKAGE_SPEC' || a:type == 'TYPE_SPEC'
-    let offset = voraxlib#utils#GetStartLineOfPlsqlObject(a:type) - 1
+    let offset = voraxlib#utils#GetStartLineOfPlsqlObject(a:type)
     if offset > 0
-      let offset -= 1
-    endif
+    	let offset -= 1
+		endif
     let filter_clause = "('" . substitute(a:type, '_SPEC', '', '') . "')"
   elseif a:type == 'PACKAGE_BODY' || a:type == 'TYPE_BODY'
-    let offset = voraxlib#utils#GetStartLineOfPlsqlObject(a:type) - 1
+    let offset = voraxlib#utils#GetStartLineOfPlsqlObject(substitute(a:type, '_BODY', '_SPEC', 'g'))
     if offset > 0
-      let offset -= 1
-    endif
+    	let offset -= 1
+		endif
     let filter_clause = "('" . substitute(a:type, '_', ' ', '') . "')"
   else
     let offset = 0

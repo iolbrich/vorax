@@ -34,7 +34,7 @@ endfunction
 " What to do when the plugin is invoked
 function! s:plugin.Callback()
   let info = g:vorax_explorer.DescribePath(g:vorax_explorer.GetCurrentNode())
-  if !empty(s:info.object)
+  if !empty(info.object)
     if info.type == 'PACKAGE'
       let type = 'PACKAGE_SPEC'
     elseif info.type == 'TYPE'
